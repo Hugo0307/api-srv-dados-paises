@@ -2,6 +2,9 @@ package com.hhsa.api.paisesapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Getter;
+
+@Getter
 public class Nome{
 	
     private String abreviado;
@@ -9,15 +12,5 @@ public class Nome{
     private String abreviadoEN;
     @JsonProperty("abreviado-ES") 
     private String abreviadoES;
-    
-	public String getAbreviado() {
-		return abreviado;
-	}
-	public String getAbreviadoEN() {
-		return abreviadoEN;
-	}
-	public String getAbreviadoES() {
-		return abreviadoES;
-	}
     
 }

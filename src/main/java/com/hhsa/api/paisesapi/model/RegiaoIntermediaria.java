@@ -1,20 +1,13 @@
 package com.hhsa.api.paisesapi.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
 public class RegiaoIntermediaria {
 	
 	private Id id;
+	@Setter
     private String nome;
-
-    public Id getId() {
-		return id;
-	}
-    
-    public String getNome() {
-		return nome;
-	}
-    
-    public void setNome(String nome) {
-		this.nome = nome;
-	}
     
 }
