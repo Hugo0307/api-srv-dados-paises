@@ -14,7 +14,8 @@ import com.hhsa.api.paisesapi.exception.BadRequestException;
 import com.hhsa.api.paisesapi.exception.ErroNaOperacaoException;
 import com.hhsa.api.paisesapi.exception.NotFoundException;
 import com.hhsa.api.paisesapi.model.Pais;
-import com.hhsa.api.paisesapi.model.PaisModificado;
+import com.hhsa.api.paisesapi.model.PaisCustomizado;
+import com.hhsa.api.paisesapi.model.mapper.PaisMapper;
 
 import feign.FeignException;
 
@@ -36,25 +37,25 @@ public class PaisService {
 		return paises;
 	}
 
-	public PaisModificado buscarPaisPorSigla(String sigla) throws ErroNaOperacaoException, NotFoundException, BadRequestException {
-		PaisModificado pais = null;
+	public PaisCustomizado buscarPaisPorSigla(String sigla) throws ErroNaOperacaoException, NotFoundException, BadRequestException {
+		PaisCustomizado pais = null;
 		
 		if(!sigla.trim().equals("")) {
 			
 				Optional<Pais> paisOptional = Optional.of(dadosPaises().stream()
-						.filter(p -> p.getId().getiSO31661ALPHA2().equalsIgnoreCase(sigla))
+						.filter(p -> p.getId().getISO31661ALPHA2().equalsIgnoreCase(sigla))
 						.findFirst()
 						.orElseThrow(() -> new NotFoundException()));
 				
-				pais = filtrarPais(paisOptional);
+				pais = PaisMapper.map(paisOptional);
 		} else {
 			throw new BadRequestException();
 		}
 		return pais;
 	}
 
-	public PaisModificado buscarPaisPorNome(String nome) throws ErroNaOperacaoException, NotFoundException, BadRequestException {
-		PaisModificado pais = null;
+	public PaisCustomizado buscarPaisPorNome(String nome) throws ErroNaOperacaoException, NotFoundException, BadRequestException {
+		PaisCustomizado pais = null;
 		
 		if(!nome.trim().equals("")) {
 			Optional<Pais> paisOptional = Optional.of(dadosPaises().stream()
@@ -62,35 +63,13 @@ public class PaisService {
 					.findFirst()
 					.orElseThrow(() -> new NotFoundException()));
 			
-			pais = filtrarPais(paisOptional);
+			pais = PaisMapper.map(paisOptional);
 		} else {
 			throw new BadRequestException();
 		}
 		return pais;
 	}
 	
-	private PaisModificado filtrarPais(Optional<Pais> pais) {
-		
-		String regiaoIntermediariaNome;
-		if(pais.get().getLocalizacao().getRegiaoIntermediaria() == null) {
-			regiaoIntermediariaNome = "Não informado.";
-		} else {
-			regiaoIntermediariaNome = pais.get().getLocalizacao().getRegiaoIntermediaria().getNome();
-		}
-		return new PaisModificado(
-				pais.get().getNome().getAbreviado(),
-				pais.get().getId().getiSO31661ALPHA2(),
-				pais.get().getLinguas().get(0).getNome(),
-				pais.get().getGoverno().getCapital().getNome(),
-				pais.get().getUnidadesMonetarias().get(0).getNome(),
-				pais.get().getLocalizacao().getRegiao().getNome(),
-				pais.get().getLocalizacao().getSubRegiao().getNome(),
-				regiaoIntermediariaNome,
-				pais.get().getArea().getTotal(),
-				pais.get().getArea().getUnidade().getSímbolo(),
-				pais.get().getHistorico()
-				);
-	}
 	
 	public List<String> listarPaisesPorContinente(String continente) throws ErroNaOperacaoException, IOException {
 

@@ -14,7 +14,7 @@ import com.hhsa.api.paisesapi.exception.BadRequestException;
 import com.hhsa.api.paisesapi.exception.ErroNaOperacaoException;
 import com.hhsa.api.paisesapi.exception.NotFoundException;
 import com.hhsa.api.paisesapi.model.Pais;
-import com.hhsa.api.paisesapi.model.PaisModificado;
+import com.hhsa.api.paisesapi.model.PaisCustomizado;
 import com.hhsa.api.paisesapi.service.PaisService;
 
 @RestController
@@ -30,12 +30,12 @@ public class PaisController {
 	}
 	
 	@GetMapping("/sigla/{sigla}")
-	public ResponseEntity<PaisModificado> buscarPaisPorSigla(@PathVariable String sigla) throws ErroNaOperacaoException, NotFoundException, BadRequestException {
+	public ResponseEntity<PaisCustomizado> buscarPaisPorSigla(@PathVariable String sigla) throws ErroNaOperacaoException, NotFoundException, BadRequestException {
 		return ResponseEntity.ok(paisesService.buscarPaisPorSigla(sigla));
 	}
 	
 	@GetMapping("/nome/{nome}")
-	public ResponseEntity<PaisModificado> buscarPaisPorNome(@PathVariable String nome) throws ErroNaOperacaoException, NotFoundException, BadRequestException {
+	public ResponseEntity<PaisCustomizado> buscarPaisPorNome(@PathVariable String nome) throws ErroNaOperacaoException, NotFoundException, BadRequestException {
 		return ResponseEntity.ok(paisesService.buscarPaisPorNome(nome));
 	}
 	
