@@ -1,33 +1,36 @@
 package com.hhsa.api.paisesapi.service;
 
 import java.io.IOException;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hhsa.api.paisesapi.client.IbgeClient;
 import com.hhsa.api.paisesapi.exception.BadRequestException;
 import com.hhsa.api.paisesapi.exception.ErroNaOperacaoException;
 import com.hhsa.api.paisesapi.exception.NotFoundException;
 import com.hhsa.api.paisesapi.model.Pais;
 import com.hhsa.api.paisesapi.model.PaisModificado;
 
+import feign.FeignException;
+
 @Service
 public class PaisService {
+	
+	@Autowired
+	private IbgeClient client;
 
 	public List<Pais> dadosPaises() {
+		List<Pais> paises = new ArrayList<>();
 		
-		ObjectMapper objectMapper = new ObjectMapper();
-		
-		List<Pais> paises = null;
 		try {
-			URL url = new URL("https://servicodados.ibge.gov.br/api/v1/paises");
-			paises = objectMapper.readValue(url, new TypeReference<List<Pais>>(){});
-		} catch (IOException e) {
+			paises = client.getPaises();
+			
+		} catch (FeignException e) {
 			new ErroNaOperacaoException();
 		}
 		return paises;
