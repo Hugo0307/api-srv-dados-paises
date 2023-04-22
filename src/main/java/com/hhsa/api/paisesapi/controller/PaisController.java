@@ -1,6 +1,5 @@
 package com.hhsa.api.paisesapi.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hhsa.api.paisesapi.exception.BadRequestException;
 import com.hhsa.api.paisesapi.exception.ErroNaOperacaoException;
 import com.hhsa.api.paisesapi.exception.NotFoundException;
 import com.hhsa.api.paisesapi.model.Pais;
@@ -25,22 +23,22 @@ public class PaisController {
 	private PaisService paisesService;
 
 	@GetMapping
-	public ResponseEntity<List<Pais>> listarPaises(){
+	public ResponseEntity<List<Pais>> listarPaises() throws ErroNaOperacaoException{
 		return ResponseEntity.ok(paisesService.dadosPaises());
 	}
 	
 	@GetMapping("/sigla/{sigla}")
-	public ResponseEntity<PaisCustomizado> buscarPaisPorSigla(@PathVariable String sigla) throws ErroNaOperacaoException, NotFoundException, BadRequestException {
+	public ResponseEntity<PaisCustomizado> buscarPaisPorSigla(@PathVariable String sigla) throws NotFoundException, ErroNaOperacaoException {
 		return ResponseEntity.ok(paisesService.buscarPaisPorSigla(sigla));
 	}
 	
 	@GetMapping("/nome/{nome}")
-	public ResponseEntity<PaisCustomizado> buscarPaisPorNome(@PathVariable String nome) throws ErroNaOperacaoException, NotFoundException, BadRequestException {
+	public ResponseEntity<PaisCustomizado> buscarPaisPorNome(@PathVariable String nome) throws NotFoundException, ErroNaOperacaoException {
 		return ResponseEntity.ok(paisesService.buscarPaisPorNome(nome));
 	}
 	
 	@GetMapping("/continente/{continente}")
-	public ResponseEntity<List<String>> listarPaisesPorContinente(@PathVariable String continente) throws ErroNaOperacaoException, IOException {
+	public ResponseEntity<List<PaisCustomizado>> listarPaisesPorContinente(@PathVariable String continente) throws NotFoundException, ErroNaOperacaoException {
 		return ResponseEntity.ok(paisesService.listarPaisesPorContinente(continente));
 	}
 }

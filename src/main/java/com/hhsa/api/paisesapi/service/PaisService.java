@@ -1,16 +1,13 @@
 package com.hhsa.api.paisesapi.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hhsa.api.paisesapi.client.IbgeClient;
-import com.hhsa.api.paisesapi.exception.BadRequestException;
 import com.hhsa.api.paisesapi.exception.ErroNaOperacaoException;
 import com.hhsa.api.paisesapi.exception.NotFoundException;
 import com.hhsa.api.paisesapi.model.Pais;
@@ -25,58 +22,48 @@ public class PaisService {
 	@Autowired
 	private IbgeClient client;
 
-	public List<Pais> dadosPaises() {
+	public List<Pais> dadosPaises() throws ErroNaOperacaoException {
 		List<Pais> paises = new ArrayList<>();
 		
 		try {
 			paises = client.getPaises();
 			
 		} catch (FeignException e) {
-			new ErroNaOperacaoException();
+			throw new ErroNaOperacaoException();
 		}
 		return paises;
 	}
 
-	public PaisCustomizado buscarPaisPorSigla(String sigla) throws ErroNaOperacaoException, NotFoundException, BadRequestException {
-		PaisCustomizado pais = null;
-		
-		if(!sigla.trim().equals("")) {
+	public PaisCustomizado buscarPaisPorSigla(String sigla) throws NotFoundException, ErroNaOperacaoException {
 			
-				Optional<Pais> paisOptional = Optional.of(dadosPaises().stream()
-						.filter(p -> p.getId().getISO31661ALPHA2().equalsIgnoreCase(sigla))
-						.findFirst()
-						.orElseThrow(() -> new NotFoundException()));
+		Optional<Pais> paisOptional = Optional.of(dadosPaises().stream()
+				.filter(p -> p.getId().getISO31661ALPHA2().equalsIgnoreCase(sigla))
+				.findFirst()
+				.orElseThrow(() -> new NotFoundException()));
 				
-				pais = PaisMapper.map(paisOptional);
-		} else {
-			throw new BadRequestException();
-		}
-		return pais;
+		return PaisMapper.map(paisOptional);
 	}
 
-	public PaisCustomizado buscarPaisPorNome(String nome) throws ErroNaOperacaoException, NotFoundException, BadRequestException {
-		PaisCustomizado pais = null;
+	public PaisCustomizado buscarPaisPorNome(String nome) throws NotFoundException, ErroNaOperacaoException {
 		
-		if(!nome.trim().equals("")) {
-			Optional<Pais> paisOptional = Optional.of(dadosPaises().stream()
-					.filter(p -> p.getNome().getAbreviado().equalsIgnoreCase(nome))
-					.findFirst()
-					.orElseThrow(() -> new NotFoundException()));
-			
-			pais = PaisMapper.map(paisOptional);
-		} else {
-			throw new BadRequestException();
-		}
-		return pais;
+		Optional<Pais> paisOptional = Optional.of(dadosPaises().stream()
+				.filter(p -> p.getNome().getAbreviado().equalsIgnoreCase(nome))
+				.findFirst()
+				.orElseThrow(() -> new NotFoundException()));
+		
+		return PaisMapper.map(paisOptional);
 	}
 	
-	
-	public List<String> listarPaisesPorContinente(String continente) throws ErroNaOperacaoException, IOException {
-
-		return dadosPaises().stream()
+	public List<PaisCustomizado> listarPaisesPorContinente(String continente) throws NotFoundException, ErroNaOperacaoException {
+		
+		List<PaisCustomizado> paises = dadosPaises().stream()
 			.filter(p -> p.getLocalizacao().getRegiao().getNome().equalsIgnoreCase(continente))
-			.map(p -> p.getNome().getAbreviado())
-			.collect(Collectors.toList());
+			.map(p -> PaisMapper.map(Optional.of(p)))
+			.toList();
+		
+		if(paises.isEmpty()) throw new NotFoundException();
+		
+		return paises;
 	}
-
+	
 }
