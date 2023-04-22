@@ -2,6 +2,9 @@ package com.hhsa.api.paisesapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Getter;
+
+@Getter
 public class Id{
     @JsonProperty("M49") 
     private int m49;
@@ -17,27 +20,5 @@ public class Id{
     private String iSO4217ALPHA;
     @JsonProperty("ISO-4217-NUMERICO") 
     private String iSO4217NUMERICO;
-    
-	public int getM49() {
-		return m49;
-	}
-	public String getiSO31661ALPHA2() {
-		return iSO31661ALPHA2;
-	}
-	public String getiSO31661ALPHA3() {
-		return iSO31661ALPHA3;
-	}
-	public String getiSO6391() {
-		return iSO6391;
-	}
-	public String getiSO6392() {
-		return iSO6392;
-	}
-	public String getiSO4217ALPHA() {
-		return iSO4217ALPHA;
-	}
-	public String getiSO4217NUMERICO() {
-		return iSO4217NUMERICO;
-	}
     
 }
