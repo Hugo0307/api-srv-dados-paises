@@ -22,18 +22,17 @@ public class PaisServiceImpl implements PaisService{
 	
 	@Autowired
 	private IbgeClient client;
-
+	
 	@Override
-	public List<Pais> dadosPaises() throws ErroNaOperacaoException {
-		List<Pais> paises = new ArrayList<>();
+	public List<PaisCustomizado> listarPaises() throws ErroNaOperacaoException {
+		List<PaisCustomizado> listPaises = new ArrayList<>();
 		
-		try {
-			paises = client.getPaises();
-			
-		} catch (FeignException e) {
-			throw new ErroNaOperacaoException();
+		for(Pais pais : dadosPaises()) {
+			PaisCustomizado paisCustomizado = PaisMapper.map(Optional.of(pais));
+			listPaises.add(paisCustomizado);
 		}
-		return paises;
+		
+		return listPaises;
 	}
 
 	@Override
@@ -68,6 +67,18 @@ public class PaisServiceImpl implements PaisService{
 		
 		if(paises.isEmpty()) throw new NotFoundException();
 		
+		return paises;
+	}
+	
+	private List<Pais> dadosPaises() throws ErroNaOperacaoException {
+		List<Pais> paises = new ArrayList<>();
+		
+		try {
+			paises = client.getPaises();
+			
+		} catch (FeignException e) {
+			throw new ErroNaOperacaoException();
+		}
 		return paises;
 	}
 	
