@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.hhsa.api.paisesapi.exception.ErroNaOperacaoException;
 import com.hhsa.api.paisesapi.exception.NotFoundException;
+
+import feign.FeignException;
 
 @ControllerAdvice
 public class PaisExceptionHandler extends ResponseEntityExceptionHandler {
 	
-	@ExceptionHandler(ErroNaOperacaoException.class)
+	@ExceptionHandler(FeignException.class)
 	public ResponseEntity<Map<String, String>> capturaErroOperacaoRequisicao() {
 		String mensagem = "Houve um erro de operação ao requisitar a API externa.";
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(setMensagem(mensagem));

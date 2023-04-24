@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hhsa.api.paisesapi.exception.ErroNaOperacaoException;
-import com.hhsa.api.paisesapi.exception.NotFoundException;
 import com.hhsa.api.paisesapi.model.PaisCustomizado;
 import com.hhsa.api.paisesapi.service.PaisService;
 
@@ -22,22 +20,22 @@ public class PaisController {
 	private PaisService service;
 
 	@GetMapping
-	public ResponseEntity<List<PaisCustomizado>> listarPaises() throws ErroNaOperacaoException{
+	public ResponseEntity<List<PaisCustomizado>> listarPaises() {
 		return ResponseEntity.ok(service.listarPaises());
 	}
 	
 	@GetMapping("/sigla/{sigla}")
-	public ResponseEntity<PaisCustomizado> buscarPaisPorSigla(@PathVariable String sigla) throws NotFoundException, ErroNaOperacaoException {
+	public ResponseEntity<PaisCustomizado> buscarPaisPorSigla(@PathVariable String sigla) {
 		return ResponseEntity.ok(service.buscarPaisPorSigla(sigla));
 	}
 	
 	@GetMapping("/nome/{nome}")
-	public ResponseEntity<PaisCustomizado> buscarPaisPorNome(@PathVariable String nome) throws NotFoundException, ErroNaOperacaoException {
+	public ResponseEntity<PaisCustomizado> buscarPaisPorNome(@PathVariable String nome) {
 		return ResponseEntity.ok(service.buscarPaisPorNome(nome));
 	}
 	
 	@GetMapping("/continente/{continente}")
-	public ResponseEntity<List<PaisCustomizado>> listarPaisesPorContinente(@PathVariable String continente) throws NotFoundException, ErroNaOperacaoException {
+	public ResponseEntity<List<PaisCustomizado>> listarPaisesPorContinente(@PathVariable String continente) {
 		return ResponseEntity.ok(service.listarPaisesPorContinente(continente));
 	}
 }
