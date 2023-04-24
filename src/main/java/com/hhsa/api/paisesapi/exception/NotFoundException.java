@@ -1,6 +1,6 @@
 package com.hhsa.api.paisesapi.exception;
 
-public class NotFoundException extends Exception{
+public class NotFoundException extends RuntimeException{
 
 	/**
 	 * 
