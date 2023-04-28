@@ -30,11 +30,10 @@ public class PaisServiceImpl implements PaisService{
 
 	@Override
 	public PaisCustomizado buscarPaisPorSigla(String sigla) {
-			
-		Optional<Pais> paisOptional = Optional.of(dadosPaises().stream()
-				.filter(p -> p.getId().getISO31661ALPHA2().equalsIgnoreCase(sigla))
+		Optional<Pais> paisOptional = Optional.of(client.getPais(sigla.toUpperCase())
+				.stream()
 				.findFirst()
-				.orElseThrow(() -> new NotFoundException()));
+				.orElseThrow(() -> new NotFoundException(sigla)));
 				
 		return PaisMapper.map(paisOptional);
 	}
@@ -45,7 +44,7 @@ public class PaisServiceImpl implements PaisService{
 		Optional<Pais> paisOptional = Optional.of(dadosPaises().stream()
 				.filter(p -> p.getNome().getAbreviado().equalsIgnoreCase(nome))
 				.findFirst()
-				.orElseThrow(() -> new NotFoundException()));
+				.orElseThrow(() -> new NotFoundException(nome)));
 		
 		return PaisMapper.map(paisOptional);
 	}
@@ -58,7 +57,7 @@ public class PaisServiceImpl implements PaisService{
 			.map(p -> PaisMapper.map(Optional.of(p)))
 			.toList();
 		
-		if(paises.isEmpty()) throw new NotFoundException();
+		if(paises.isEmpty()) throw new NotFoundException(continente);
 		
 		return paises;
 	}

@@ -1,3 +1,4 @@
 clients:
-  name: Serviço Dados IBGE
-  url: https://servicodados.ibge.gov.br/api/v1/paises
+  servico-dados-ibge-paises:
+    name: Serviço Dados IBGE
+    url: https://servicodados.ibge.gov.br/api/v1/paises
