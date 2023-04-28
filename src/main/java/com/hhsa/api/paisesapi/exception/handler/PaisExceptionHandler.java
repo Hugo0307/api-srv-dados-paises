@@ -12,19 +12,24 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.hhsa.api.paisesapi.exception.NotFoundException;
 
 import feign.FeignException;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @ControllerAdvice
 public class PaisExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(FeignException.class)
-	public ResponseEntity<Map<String, String>> capturaErroOperacaoRequisicao() {
+	public ResponseEntity<Map<String, String>> capturaErroOperacaoRequisicao(FeignException e) {
 		String mensagem = "Houve um erro de operação ao requisitar a API externa.";
+		log.error("### Erro na chamada à API do IBGE: {}", e.getMessage());
+		log.error("### Motivo: {}", e.getCause());;
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(setMensagem(mensagem));
 	}
 
 	@ExceptionHandler(NotFoundException.class)
-	public ResponseEntity<Map<String, String>> capturaErroNotFound() {
-		String mensagem = "Sem dados a exibir. Verifique sua pesquisa.";
+	public ResponseEntity<Map<String, String>> capturaErroNotFound(NotFoundException e) {
+		String mensagem = String.format("Sem dados a exibir. Parâmetro de pesquisa inválido: %s", e.getMessage());
+		log.error("### Parâmetro de pesquisa inválido {}", e.getMessage());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(setMensagem(mensagem));
 	}
 	
