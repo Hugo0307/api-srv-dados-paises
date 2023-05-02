@@ -2,3 +2,8 @@ clients:
   servico-dados-ibge-paises:
     name: Serviço Dados IBGE
     url: https://servicodados.ibge.gov.br/api/v1/paises
+    
+app:
+  name: '@project.name@'
+  version: '@project.version@'
+  description: '@project.description@'
